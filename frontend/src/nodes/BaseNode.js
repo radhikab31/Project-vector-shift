@@ -136,12 +136,12 @@ const ColorPickerComponent = ({colorType, value, onChange}) => {
           style={{
             width: "30px",
             height: "30px",
-            backgroundColor: value,
+            backgroundColor: formatColorForCSS(value),
             borderRadius: "4px",
             border: "1px solid #ddd",
           }}
         />
-        <span style={{fontSize: "10px", color: "#666"}}>{value || "Click to pick"}</span>
+        <span style={{fontSize: "14px", color: "#666"}}>{formatColorForCSS(value) || "Click to pick"}</span>
       </div>
     </div>
   );
@@ -535,6 +535,8 @@ export const BaseNode = ({id, data, config}) => {
       // ========== COLOR PICKER ==========
       else if (field.type === "colorPicker") {
         const colorType = fieldValues[field.colorTypeKey] || "RGB";
+        console.log("color value", value, formatColorForCSS(value));
+
         return (
           <div key={field.key}>
             <ColorPickerComponent colorType={colorType} value={value || ""} onChange={(newValue) => handleFieldChange(field.key, newValue)} />
@@ -657,4 +659,16 @@ export const BaseNode = ({id, data, config}) => {
       ))}
     </div>
   );
+};
+
+const formatColorForCSS = (value) => {
+  if (!value) return "transparent";
+
+  // Convert RGB format: "255, 128, 64" → "rgb(255, 128, 64)"
+  if (typeof value === "string" && value.includes(",")) {
+    return `rgb(${value})`;
+  }
+
+  // Keep HEX format unchanged: "#FF8040" → "#FF8040"
+  return value;
 };
