@@ -15,6 +15,7 @@ const colorSchemes = {
   document: {bg: "#FFF3E0", border: "#FFA500", title: "#E65100"},
   table: {bg: "#E3F2FD", border: "#0288D1", title: "#01579B"},
   colorPalette: {bg: "#FCE4EC", border: "#E91E63", title: "#880E4F"},
+  decision: {bg: "#FFF9C4", border: "#FBC02D", title: "#F57F17"},
 };
 
 // ============ HELPER COMPONENTS ============
@@ -267,6 +268,13 @@ export const BaseNode = ({id, data, config}) => {
     return fields.map((field) => {
       const value = fieldValues[field.key];
 
+      // Check if field should be shown (conditional rendering)
+      if (field.conditional && field.showWhen) {
+        if (!field.showWhen(fieldValues)) {
+          return null;
+        }
+      }
+
       // ========== TEXT INPUT ==========
       if (field.type === "text") {
         return (
@@ -288,6 +296,8 @@ export const BaseNode = ({id, data, config}) => {
               type="text"
               value={value || ""}
               onChange={(e) => handleFieldChange(field.key, e.target.value)}
+              onMouseDown={(e) => e.stopPropagation()}
+              onTouchStart={(e) => e.stopPropagation()}
               placeholder={field.placeholder || ""}
               style={{
                 padding: "8px 10px",
@@ -329,6 +339,8 @@ export const BaseNode = ({id, data, config}) => {
               value={value || ""}
               onWheel={(e) => e.target.blur()}
               onChange={(e) => handleFieldChange(field.key, e.target.value ? parseInt(e.target.value) : "")}
+              onMouseDown={(e) => e.stopPropagation()}
+              onTouchStart={(e) => e.stopPropagation()}
               min={field.min || 0}
               max={field.max || undefined}
               step={field.step || 1}
@@ -381,6 +393,8 @@ export const BaseNode = ({id, data, config}) => {
                   });
                 }
               }}
+              onMouseDown={(e) => e.stopPropagation()}
+              onTouchStart={(e) => e.stopPropagation()}
               style={{
                 padding: "8px 10px",
                 borderRadius: "6px",
@@ -433,6 +447,8 @@ export const BaseNode = ({id, data, config}) => {
             <select
               value={value || ""}
               onChange={(e) => handleFieldChange(field.key, e.target.value)}
+              onMouseDown={(e) => e.stopPropagation()}
+              onTouchStart={(e) => e.stopPropagation()}
               style={{
                 padding: "8px 10px",
                 borderRadius: "6px",
@@ -450,11 +466,16 @@ export const BaseNode = ({id, data, config}) => {
               onBlur={(e) => (e.target.style.borderColor = "#ddd")}
             >
               <option value="">Select {field.label}</option>
-              {field.options.map((opt) => (
-                <option key={opt} value={opt}>
-                  {opt}
-                </option>
-              ))}
+              {field.options.map((opt) => {
+                // Handle both string options and object options
+                const optionValue = typeof opt === "object" ? opt.value : opt;
+                const optionLabel = typeof opt === "object" ? opt.label : opt;
+                return (
+                  <option key={optionValue} value={optionValue}>
+                    {optionLabel}
+                  </option>
+                );
+              })}
             </select>
           </div>
         );
@@ -480,6 +501,8 @@ export const BaseNode = ({id, data, config}) => {
             <textarea
               value={value || ""}
               onChange={(e) => handleFieldChange(field.key, e.target.value)}
+              onMouseDown={(e) => e.stopPropagation()}
+              onTouchStart={(e) => e.stopPropagation()}
               rows={field.rows || 3}
               placeholder={field.placeholder || ""}
               style={{
@@ -519,6 +542,8 @@ export const BaseNode = ({id, data, config}) => {
                 type="checkbox"
                 checked={value || false}
                 onChange={(e) => handleFieldChange(field.key, e.target.checked)}
+                onMouseDown={(e) => e.stopPropagation()}
+                onTouchStart={(e) => e.stopPropagation()}
                 style={{
                   cursor: "pointer",
                   width: "16px",

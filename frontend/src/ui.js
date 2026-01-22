@@ -14,6 +14,7 @@ import {ImageNode} from "./nodes/imageNode";
 import {DocumentNode} from "./nodes/documentNode";
 import {TableNode} from "./nodes/tableNode";
 import {ColorPaletteNode} from "./nodes/colorPaletteNode";
+import {DecisionNode} from "./nodes/decisionNode";
 
 import "reactflow/dist/style.css";
 
@@ -28,6 +29,7 @@ const nodeTypes = {
   document: DocumentNode,
   table: TableNode,
   colorPalette: ColorPaletteNode,
+  decision: DecisionNode,
 };
 
 const selector = (state) => ({

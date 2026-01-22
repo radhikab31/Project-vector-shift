@@ -14,6 +14,7 @@ export const PipelineToolbar = () => {
         <DraggableNode type="document" label="Document" />
         <DraggableNode type="table" label="Table" />
         <DraggableNode type="colorPalette" label="Color Palette" />
+        <DraggableNode type="decision" label="Decision" />
       </div>
     </div>
   );

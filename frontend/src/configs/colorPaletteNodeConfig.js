@@ -20,13 +20,6 @@ export const colorPaletteNodeConfig = (id) => ({
       defaultValue: "RGB",
     },
     {
-      key: "colorValue",
-      label: "Color Value",
-      type: "text",
-      placeholder: "RGB: rgb(255, 128, 64) or HEX: #FF8040",
-      defaultValue: "",
-    },
-    {
       key: "colorPickerDisplay",
       label: "Color Picker",
       type: "colorPicker",
