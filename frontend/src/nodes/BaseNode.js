@@ -364,7 +364,7 @@ export const BaseNode = ({id, data, config}) => {
       </div>
 
       {/* Description */}
-      {description && <div className="text-2.5 leading-3 text-gray-500 mb-2.5 italic line-">{description}</div>}
+      {description && <div className="text-2.5 leading-6 text-gray-500 mb-2.5">{description}</div>}
 
       {/* Form Fields Container */}
       {fields.length > 0 && (
