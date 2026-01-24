@@ -124,9 +124,6 @@ export const PipelineUI = () => {
   }, []);
 
   // Optional: Clear dots button
-  const clearDots = useCallback(() => {
-    setDragDots([]);
-  }, []);
 
   return (
     <>
@@ -157,30 +154,6 @@ export const PipelineUI = () => {
             pointer-events-none
           "
         />
-
-        {/* Clear dots button (optional) */}
-        {dragDots.length > 0 && (
-          <button
-            onClick={clearDots}
-            className="
-              absolute top-4 left-32 z-20
-              px-3 py-1.5 text-xs
-              bg-gradient-to-r from-red-600/20 to-red-700/20
-              dark:from-red-600/30 dark:to-red-700/30
-              hover:from-red-600/30 hover:to-red-700/30
-              dark:hover:from-red-600/40 dark:hover:to-red-700/40
-              text-red-700 dark:text-red-300
-              border border-red-400/30 dark:border-red-300/40
-              rounded-lg backdrop-blur-sm
-              transition-all duration-200
-              hover:scale-105
-              font-medium
-              cursor-pointer
-            "
-          >
-            Clear Dots ({dragDots.length})
-          </button>
-        )}
 
         {/* ReactFlow with custom styling */}
         <div className="relative z-10 w-full h-full flex-1" style={{position: "relative"}}>
@@ -215,11 +188,11 @@ export const PipelineUI = () => {
           </ReactFlow>
 
           {/* Drag indicator dots overlay - Permanent dots */}
-          <svg className="absolute inset-0 w-full h-full pointer-events-none z-0" style={{position: "absolute", top: 0, left: 0}}>
+          {/* <svg className="absolute inset-0 w-full h-full pointer-events-none z-0" style={{position: "absolute", top: 0, left: 0}}>
             {dragDots.map((dot) => (
               <circle key={dot.id} cx={dot.x} cy={dot.y} r={2} fill="rgba(139, 92, 246, 0.6)" />
             ))}
-          </svg>
+          </svg> */}
         </div>
       </div>
     </>

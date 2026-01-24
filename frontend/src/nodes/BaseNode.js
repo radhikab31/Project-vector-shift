@@ -140,6 +140,23 @@ const TableComponent = ({rows, columns}) => {
 
 export const BaseNode = ({id, data, config}) => {
   const {colorMode} = useColorMode();
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    const darkMode = document.documentElement.classList.contains("dark");
+    setIsDark(darkMode);
+
+    const observer = new MutationObserver(() => {
+      setIsDark(document.documentElement.classList.contains("dark"));
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   // Extract configuration with defaults
   const {title = "Node", description = null, handles = [], fields = [], styles = {}, color = "processing"} = config;
@@ -305,9 +322,9 @@ export const BaseNode = ({id, data, config}) => {
   };
 
   // Determine colors based on mode
-  const bgColor = colorMode === "dark" ? scheme.darkBg : scheme.lightBg;
-  const borderColor = colorMode === "dark" ? scheme.darkBorder : scheme.lightBorder;
-  const titleColor = colorMode === "dark" ? scheme.darkTitle : scheme.title;
+  const bgColor = isDark ? scheme.darkBg : scheme.lightBg;
+  const borderColor = isDark ? scheme.darkBorder : scheme.lightBorder;
+  const titleColor = isDark ? scheme.darkTitle : scheme.title;
 
   return (
     <div
@@ -348,8 +365,8 @@ export const BaseNode = ({id, data, config}) => {
           id={handle.id}
           className="w-3 h-3 rounded-full border-2 border-white shadow-md hover:shadow-lg hover:scale-150 transition-all duration-300 cursor-pointer"
           style={{
-            backgroundColor: colorMode === "dark" ? scheme.darkBorder : scheme.border,
-            boxShadow: `0 0 8px ${colorMode === "dark" ? scheme.darkBorder : scheme.border}50, 0 0 0 2px white`,
+            backgroundColor: isDark ? scheme.darkBorder : scheme.border,
+            boxShadow: `0 0 8px ${isDark ? scheme.darkBorder : scheme.border}50, 0 0 0 2px white`,
             ...handle.style,
           }}
         />
