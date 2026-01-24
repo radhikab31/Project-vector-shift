@@ -1,4 +1,31 @@
+import {useStore} from "./store";
+
 export const SubmitButton = () => {
+  const handleSubmit = async () => {
+    const {nodes, edges} = useStore.getState();
+
+    try {
+      const res = await fetch("http://localhost:8000/pipelines/parse", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({nodes, edges}),
+      });
+
+      if (!res.ok) {
+        throw new Error("Backend error");
+      }
+
+      const data = await res.json();
+
+      alert(`Pipeline Analysis\n\n` + `Nodes: ${data.num_nodes}\n` + `Edges: ${data.num_edges}\n` + `Is DAG: ${data.is_dag ? "Yes" : "No"}`);
+    } catch (err) {
+      console.error("Submit failed:", err);
+      alert("Failed to analyze pipeline");
+    }
+  };
+
   return (
     <div
       className="
@@ -12,9 +39,9 @@ export const SubmitButton = () => {
         flex-shrink-0
       "
     >
-      {/* Submit button */}
       <button
-        type="submit"
+        type="button"
+        onClick={handleSubmit}
         className="
           px-8 py-3
           text-lg font-semibold
@@ -43,9 +70,10 @@ export const SubmitButton = () => {
           overflow-hidden
         "
       >
-        {/* Button text with icon */}
         <span className="relative flex items-center gap-2">
-          {/* Checkmark icon */}
+          <svg className="w-5 h-5 transition-transform duration-300" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+          </svg>
           Submit
         </span>
       </button>
