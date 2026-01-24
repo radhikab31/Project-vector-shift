@@ -98,51 +98,16 @@ const ColorPickerComponent = ({colorType, value, onChange}) => {
 
   return (
     <div style={{marginBottom: "10px"}}>
-      <label
-        style={{
-          fontSize: "11px",
-          display: "block",
-          fontWeight: "500",
-          color: "#555",
-          marginBottom: "4px",
-          textTransform: "uppercase",
-          letterSpacing: "0.5px",
-        }}
-      >
-        Color Picker
-      </label>
-      <canvas
-        ref={canvasRef}
-        width={200}
-        height={120}
-        onClick={handleCanvasClick}
-        style={{
-          width: "100%",
-          height: "auto",
-          cursor: "crosshair",
-          borderRadius: "6px",
-          border: "1px solid #ddd",
-          marginBottom: "8px",
-          display: "block",
-        }}
-      />
-      <div
-        style={{
-          display: "flex",
-          gap: "8px",
-          alignItems: "center",
-        }}
-      >
+      <label className="text-2.6 block font-semibold text-zinc-500 mb-1 uppercase tracking-[0.5px]">Color Picker</label>
+      <canvas ref={canvasRef} width={200} height={120} onClick={handleCanvasClick} className="w-full h-auto cursor-crosshair rounded-md border border-neutral-200 block mb-2 " />
+      <div className="flex gap-2 items-center">
         <div
+          className="w-7.5 h-7.5 rounded-sm border border-neutral-200"
           style={{
-            width: "30px",
-            height: "30px",
             backgroundColor: formatColorForCSS(value),
-            borderRadius: "4px",
-            border: "1px solid #ddd",
           }}
         />
-        <span style={{fontSize: "14px", color: "#666"}}>{formatColorForCSS(value) || "Click to pick"}</span>
+        <span className="text-3.5 text-gray-600">{formatColorForCSS(value) || "Click to pick"}</span>
       </div>
     </div>
   );
@@ -169,64 +134,18 @@ const TableComponent = ({rows, columns}) => {
   };
 
   if (rows === 0 || columns === 0) {
-    return (
-      <div
-        style={{
-          fontSize: "11px",
-          color: "#999",
-          padding: "8px",
-          textAlign: "center",
-        }}
-      >
-        Set rows and columns to render table
-      </div>
-    );
+    return <div className="text-2.6 text-slate-400 p-2 text-center">Set rows and columns to render table</div>;
   }
 
   return (
-    <div
-      style={{
-        overflowX: "auto",
-        marginBottom: "10px",
-        marginTop: "8px",
-      }}
-    >
-      <table
-        style={{
-          width: "100%",
-          borderCollapse: "collapse",
-          fontSize: "10px",
-          backgroundColor: "#fff",
-          border: "1px solid #ddd",
-          borderRadius: "4px",
-          overflow: "hidden",
-        }}
-      >
+    <div className="overflow-x-auto mb-2.5 mt-2">
+      <table className="w-full text-2.5 overflow-hidden bg-white rounded-sm border border-neutral-200 border-collapse">
         <tbody>
           {tableData.map((row, rowIdx) => (
             <tr key={rowIdx}>
               {row.map((cell, colIdx) => (
-                <td
-                  key={`${rowIdx}-${colIdx}`}
-                  style={{
-                    border: "1px solid #ddd",
-                    padding: "4px 6px",
-                    minWidth: "40px",
-                  }}
-                >
-                  <input
-                    type="text"
-                    value={cell}
-                    onChange={(e) => handleCellChange(rowIdx, colIdx, e.target.value)}
-                    style={{
-                      width: "100%",
-                      border: "none",
-                      padding: "2px",
-                      fontSize: "10px",
-                      outline: "none",
-                    }}
-                    placeholder={`R${rowIdx + 1}C${colIdx + 1}`}
-                  />
+                <td key={`${rowIdx}-${colIdx}`} className="border border-neutral-200 py-1 px-1.5">
+                  <input type="text" value={cell} onChange={(e) => handleCellChange(rowIdx, colIdx, e.target.value)} className="w-full border-none p-0.5 text-2.5 outline-none" placeholder={`R${rowIdx + 1}C${colIdx + 1}`} />
                 </td>
               ))}
             </tr>
@@ -279,40 +198,8 @@ export const BaseNode = ({id, data, config}) => {
       if (field.type === "text") {
         return (
           <div key={field.key} style={{marginBottom: "10px"}}>
-            <label
-              style={{
-                fontSize: "11px",
-                display: "block",
-                fontWeight: "500",
-                color: "#555",
-                marginBottom: "4px",
-                textTransform: "uppercase",
-                letterSpacing: "0.5px",
-              }}
-            >
-              {field.label}
-            </label>
-            <input
-              type="text"
-              value={value || ""}
-              onChange={(e) => handleFieldChange(field.key, e.target.value)}
-              onMouseDown={(e) => e.stopPropagation()}
-              onTouchStart={(e) => e.stopPropagation()}
-              placeholder={field.placeholder || ""}
-              style={{
-                padding: "8px 10px",
-                borderRadius: "6px",
-                border: "1px solid #ddd",
-                fontSize: "12px",
-                width: "100%",
-                boxSizing: "border-box",
-                fontFamily: '"Segoe UI", Tahoma, Geneva, Verdana, sans-serif',
-                transition: "border-color 0.2s",
-                outline: "none",
-              }}
-              onFocus={(e) => (e.target.style.borderColor = scheme.border)}
-              onBlur={(e) => (e.target.style.borderColor = "#ddd")}
-            />
+            <label className="text-2.6 block font-semibold text-neutral-600 mb-1 uppercase tracking-widest ">{field.label}</label>
+            <input type="text" value={value || ""} onChange={(e) => handleFieldChange(field.key, e.target.value)} onMouseDown={(e) => e.stopPropagation()} onTouchStart={(e) => e.stopPropagation()} placeholder={field.placeholder || ""} className="py-2 px-2.5 rounded-md border border-neutral-200 text-xs w-full outline-none box-border font-serif transition-[border-color] duration-200" onFocus={(e) => (e.target.style.borderColor = scheme.border)} onBlur={(e) => (e.target.style.borderColor = "#ddd")} />
           </div>
         );
       }
@@ -321,43 +208,8 @@ export const BaseNode = ({id, data, config}) => {
       else if (field.type === "number") {
         return (
           <div key={field.key} style={{marginBottom: "10px"}}>
-            <label
-              style={{
-                fontSize: "11px",
-                display: "block",
-                fontWeight: "500",
-                color: "#555",
-                marginBottom: "4px",
-                textTransform: "uppercase",
-                letterSpacing: "0.5px",
-              }}
-            >
-              {field.label}
-            </label>
-            <input
-              type="number"
-              value={value || ""}
-              onWheel={(e) => e.target.blur()}
-              onChange={(e) => handleFieldChange(field.key, e.target.value ? parseInt(e.target.value) : "")}
-              onMouseDown={(e) => e.stopPropagation()}
-              onTouchStart={(e) => e.stopPropagation()}
-              min={field.min || 0}
-              max={field.max || undefined}
-              step={field.step || 1}
-              style={{
-                padding: "8px 10px",
-                borderRadius: "6px",
-                border: "1px solid #ddd",
-                fontSize: "12px",
-                width: "100%",
-                boxSizing: "border-box",
-                fontFamily: '"Segoe UI", Tahoma, Geneva, Verdana, sans-serif',
-                transition: "border-color 0.2s",
-                outline: "none",
-              }}
-              onFocus={(e) => (e.target.style.borderColor = scheme.border)}
-              onBlur={(e) => (e.target.style.borderColor = "#ddd")}
-            />
+            <label className="text-2.6 block font-semibold text-neutral-600 mb-1 uppercase tracking-widest ">{field.label}</label>
+            <input type="number" value={value || ""} onWheel={(e) => e.target.blur()} onChange={(e) => handleFieldChange(field.key, e.target.value ? parseInt(e.target.value) : "")} onMouseDown={(e) => e.stopPropagation()} onTouchStart={(e) => e.stopPropagation()} min={field.min || 0} max={field.max || undefined} step={field.step || 1} className="py-2 px-2.5 rounded-md border border-neutral-200 text-xs w-full outline-none box-border font-serif transition-[border-color] duration-200" onFocus={(e) => (e.target.style.borderColor = scheme.border)} onBlur={(e) => (e.target.style.borderColor = "#ddd")} />
           </div>
         );
       }
@@ -366,19 +218,8 @@ export const BaseNode = ({id, data, config}) => {
       else if (field.type === "file") {
         return (
           <div key={field.key} style={{marginBottom: "10px"}}>
-            <label
-              style={{
-                fontSize: "11px",
-                display: "block",
-                fontWeight: "500",
-                color: "#555",
-                marginBottom: "4px",
-                textTransform: "uppercase",
-                letterSpacing: "0.5px",
-              }}
-            >
-              {field.label}
-            </label>
+            <label className="text-2.6 block font-semibold text-neutral-600 mb-1 uppercase tracking-widest ">{field.label}</label>
+
             <input
               type="file"
               accept={field.accept || "*"}
@@ -395,34 +236,11 @@ export const BaseNode = ({id, data, config}) => {
               }}
               onMouseDown={(e) => e.stopPropagation()}
               onTouchStart={(e) => e.stopPropagation()}
-              style={{
-                padding: "8px 10px",
-                borderRadius: "6px",
-                border: "1px solid #ddd",
-                fontSize: "11px",
-                width: "100%",
-                boxSizing: "border-box",
-                cursor: "pointer",
-                transition: "border-color 0.2s",
-              }}
+              className="py-2 px-2.5 rounded-md border border-neutral-200 text-xs w-full outline-none box-border font-serif transition-[border-color] duration-200"
               onFocus={(e) => (e.target.style.borderColor = scheme.border)}
               onBlur={(e) => (e.target.style.borderColor = "#ddd")}
             />
-            {value?.name && (
-              <div
-                style={{
-                  fontSize: "10px",
-                  color: "#666",
-                  marginTop: "4px",
-                  padding: "6px",
-                  backgroundColor: "#f5f5f5",
-                  borderRadius: "4px",
-                  wordBreak: "break-word",
-                }}
-              >
-                📄 {value.name}
-              </div>
-            )}
+            {value?.name && <div className="text-xs text-gray-600 bg-neutral-100 mb-1 p-1.5 rounded break-words">📄 {value.name}</div>}
           </div>
         );
       }
@@ -431,40 +249,8 @@ export const BaseNode = ({id, data, config}) => {
       else if (field.type === "select") {
         return (
           <div key={field.key} style={{marginBottom: "10px"}}>
-            <label
-              style={{
-                fontSize: "11px",
-                display: "block",
-                fontWeight: "500",
-                color: "#555",
-                marginBottom: "4px",
-                textTransform: "uppercase",
-                letterSpacing: "0.5px",
-              }}
-            >
-              {field.label}
-            </label>
-            <select
-              value={value || ""}
-              onChange={(e) => handleFieldChange(field.key, e.target.value)}
-              onMouseDown={(e) => e.stopPropagation()}
-              onTouchStart={(e) => e.stopPropagation()}
-              style={{
-                padding: "8px 10px",
-                borderRadius: "6px",
-                border: "1px solid #ddd",
-                fontSize: "12px",
-                width: "100%",
-                boxSizing: "border-box",
-                fontFamily: '"Segoe UI", Tahoma, Geneva, Verdana, sans-serif',
-                backgroundColor: "#fff",
-                cursor: "pointer",
-                transition: "border-color 0.2s",
-                outline: "none",
-              }}
-              onFocus={(e) => (e.target.style.borderColor = scheme.border)}
-              onBlur={(e) => (e.target.style.borderColor = "#ddd")}
-            >
+            <label className="text-xs block font-semibold text-gray-600 mb-1 uppercase tracking-widest">{field.label}</label>
+            <select value={value || ""} onChange={(e) => handleFieldChange(field.key, e.target.value)} onMouseDown={(e) => e.stopPropagation()} onTouchStart={(e) => e.stopPropagation()} className="py-2 px-2.5 rounded-md border bg-white cursor-pointer border-neutral-200 text-xs w-full outline-none box-border font-serif transition-[border-color] duration-200" onFocus={(e) => (e.target.style.borderColor = scheme.border)} onBlur={(e) => (e.target.style.borderColor = "#ddd")}>
               <option value="">Select {field.label}</option>
               {field.options.map((opt) => {
                 // Handle both string options and object options
@@ -485,41 +271,8 @@ export const BaseNode = ({id, data, config}) => {
       else if (field.type === "textarea") {
         return (
           <div key={field.key} style={{marginBottom: "10px"}}>
-            <label
-              style={{
-                fontSize: "11px",
-                display: "block",
-                fontWeight: "500",
-                color: "#555",
-                marginBottom: "4px",
-                textTransform: "uppercase",
-                letterSpacing: "0.5px",
-              }}
-            >
-              {field.label}
-            </label>
-            <textarea
-              value={value || ""}
-              onChange={(e) => handleFieldChange(field.key, e.target.value)}
-              onMouseDown={(e) => e.stopPropagation()}
-              onTouchStart={(e) => e.stopPropagation()}
-              rows={field.rows || 3}
-              placeholder={field.placeholder || ""}
-              style={{
-                padding: "8px 10px",
-                borderRadius: "6px",
-                border: "1px solid #ddd",
-                fontSize: "11px",
-                width: "100%",
-                boxSizing: "border-box",
-                fontFamily: '"Monaco", "Menlo", "Ubuntu Mono", monospace',
-                resize: "vertical",
-                transition: "border-color 0.2s",
-                outline: "none",
-              }}
-              onFocus={(e) => (e.target.style.borderColor = scheme.border)}
-              onBlur={(e) => (e.target.style.borderColor = "#ddd")}
-            />
+            <label className="text-xs block font-semibold text-gray-600 mb-1 uppercase tracking-widest">{field.label}</label>
+            <textarea value={value || ""} onChange={(e) => handleFieldChange(field.key, e.target.value)} onMouseDown={(e) => e.stopPropagation()} onTouchStart={(e) => e.stopPropagation()} rows={field.rows || 3} placeholder={field.placeholder || ""} className="py-2 px-2.5 resize-y rounded-md border border-neutral-200 text-xs w-full outline-none box-border font-serif transition-[border-color] duration-200" onFocus={(e) => (e.target.style.borderColor = scheme.border)} onBlur={(e) => (e.target.style.borderColor = "#ddd")} />
           </div>
         );
       }
@@ -528,26 +281,15 @@ export const BaseNode = ({id, data, config}) => {
       else if (field.type === "checkbox") {
         return (
           <div key={field.key} style={{marginBottom: "10px"}}>
-            <label
-              style={{
-                fontSize: "12px",
-                display: "flex",
-                alignItems: "center",
-                gap: "8px",
-                cursor: "pointer",
-                userSelect: "none",
-              }}
-            >
+            <label className="text-xs flex items-center gap-2 cursor-pointer select-none">
               <input
                 type="checkbox"
                 checked={value || false}
                 onChange={(e) => handleFieldChange(field.key, e.target.checked)}
                 onMouseDown={(e) => e.stopPropagation()}
                 onTouchStart={(e) => e.stopPropagation()}
+                className="cursor-pointer w-4 h-4 "
                 style={{
-                  cursor: "pointer",
-                  width: "16px",
-                  height: "16px",
                   accentColor: scheme.border,
                 }}
               />
@@ -575,19 +317,7 @@ export const BaseNode = ({id, data, config}) => {
         const columns = fieldValues[field.columnsKey] || 0;
         return (
           <div key={field.key} style={{marginBottom: "10px"}}>
-            <label
-              style={{
-                fontSize: "11px",
-                display: "block",
-                fontWeight: "500",
-                color: "#555",
-                marginBottom: "4px",
-                textTransform: "uppercase",
-                letterSpacing: "0.5px",
-              }}
-            >
-              {field.label}
-            </label>
+            <label className="text-xs block font-semibold mb-1 uppercase tracking-widest">{field.label}</label>
             <TableComponent rows={parseInt(rows) || 0} columns={parseInt(columns) || 0} />
           </div>
         );
@@ -625,38 +355,22 @@ export const BaseNode = ({id, data, config}) => {
     >
       {/* Title */}
       <div
+        className="font-bold mb-2.5 text-sm tracking-[0.3px]"
         style={{
-          fontWeight: "700",
-          marginBottom: "6px",
-          fontSize: "13px",
           color: scheme.title,
-          letterSpacing: "0.3px",
         }}
       >
         {title}
       </div>
 
       {/* Description */}
-      {description && (
-        <div
-          style={{
-            fontSize: "10px",
-            color: "#888",
-            marginBottom: "10px",
-            fontStyle: "italic",
-            lineHeight: "1.4",
-          }}
-        >
-          {description}
-        </div>
-      )}
+      {description && <div className="text-2.5 leading-3 text-gray-500 mb-2.5 italic line-">{description}</div>}
 
       {/* Form Fields Container */}
       {fields.length > 0 && (
         <div
+          className="mb-2 pt-2"
           style={{
-            marginBottom: "8px",
-            paddingTop: "8px",
             borderTop: `1px solid ${scheme.border}30`,
           }}
         >
@@ -671,12 +385,9 @@ export const BaseNode = ({id, data, config}) => {
           type={handle.type}
           position={handle.position}
           id={handle.id}
+          className="w-3 h-3 rounded-full border-0.5 border-white"
           style={{
-            width: "12px",
-            height: "12px",
-            borderRadius: "50%",
             backgroundColor: scheme.border,
-            border: "2px solid white",
             boxShadow: `0 0 0 2px ${scheme.border}`,
             ...handle.style,
           }}
