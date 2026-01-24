@@ -2,6 +2,7 @@
 // Custom styled ReactFlow control buttons with w-26 h-30 bg-none
 // Permanent dots visible where nodes are dragged
 // Dark mode aware MiniMap with proper viewport visibility
+// FIXED: Proper onConnect handler with edge validation
 
 import {useState, useRef, useCallback, useEffect} from "react";
 import ReactFlow, {Controls, Background, MiniMap} from "reactflow";
@@ -18,6 +19,7 @@ import {ColorPaletteNode} from "./nodes/colorPaletteNode";
 import {DecisionNode} from "./nodes/decisionNode";
 
 import "reactflow/dist/style.css";
+import {useDarkMode} from "./hooks/useDarkMode";
 
 const gridSize = 20;
 const proOptions = {hideAttribution: true};
@@ -47,25 +49,8 @@ export const PipelineUI = () => {
   const reactFlowWrapper = useRef(null);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const [dragDots, setDragDots] = useState([]); // Track dots for drag locations
-  const [isDark, setIsDark] = useState(false); // Track dark mode for minimap
+  const isDark = useDarkMode(); // Track dark mode for minimap
   const {nodes, edges, getNodeID, addNode, onNodesChange, onEdgesChange, onConnect} = useStore(selector, shallow);
-
-  // Track dark mode changes for minimap
-  useEffect(() => {
-    const darkMode = document.documentElement.classList.contains("dark");
-    setIsDark(darkMode);
-
-    const observer = new MutationObserver(() => {
-      setIsDark(document.documentElement.classList.contains("dark"));
-    });
-
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["class"],
-    });
-
-    return () => observer.disconnect();
-  }, []);
 
   const getInitNodeData = (nodeID, type) => {
     let nodeData = {id: nodeID, nodeType: `${type}`};
@@ -81,7 +66,6 @@ export const PipelineUI = () => {
         const appData = JSON.parse(event.dataTransfer.getData("application/reactflow"));
         const type = appData?.nodeType;
 
-        // check if the dropped element is valid
         if (typeof type === "undefined" || !type) {
           return;
         }
@@ -91,7 +75,6 @@ export const PipelineUI = () => {
           y: event.clientY - reactFlowBounds.top,
         });
 
-        // Add a dot at the drop location
         const newDot = {
           id: `dot-${Date.now()}`,
           x: position.x,
@@ -100,7 +83,6 @@ export const PipelineUI = () => {
 
         setDragDots((prevDots) => {
           const updatedDots = [...prevDots, newDot];
-          // Keep only last 200 dots to avoid performance issues
           return updatedDots.slice(-200);
         });
 
@@ -123,11 +105,22 @@ export const PipelineUI = () => {
     event.dataTransfer.dropEffect = "move";
   }, []);
 
-  // Optional: Clear dots button
+  const handleConnect = useCallback(
+    (connection) => {
+      console.log("🔗 [UI] handleConnect called with:", connection);
+      if (connection.target === connection.source) {
+        console.warn("⚠️ [UI] Self-connection rejected");
+        return;
+      }
+      console.log("📡 [UI] Passing to store.onConnect...");
+      onConnect(connection);
+      console.log("✅ [UI] store.onConnect completed");
+    },
+    [onConnect],
+  );
 
   return (
     <>
-      {/* Canvas wrapper with gradient background */}
       <div
         className="
           flex-grow
@@ -145,7 +138,6 @@ export const PipelineUI = () => {
         }}
         ref={reactFlowWrapper}
       >
-        {/* Subtle animated background accent */}
         <div
           className="
             absolute inset-0 opacity-20 dark:opacity-10
@@ -155,13 +147,35 @@ export const PipelineUI = () => {
           "
         />
 
-        {/* ReactFlow with custom styling */}
         <div className="relative z-10 w-full h-full flex-1" style={{position: "relative"}}>
-          <ReactFlow nodes={nodes} edges={edges} onNodesChange={onNodesChange} onEdgesChange={onEdgesChange} onConnect={onConnect} onDrop={onDrop} onDragOver={onDragOver} onInit={setReactFlowInstance} nodeTypes={nodeTypes} proOptions={proOptions} snapGrid={[gridSize, gridSize]} connectionLineType="smoothstep">
-            {/* Styled background grid */}
+          <ReactFlow
+            nodes={nodes}
+            edges={edges}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            onConnect={handleConnect}
+            onDrop={onDrop}
+            onDragOver={onDragOver}
+            onInit={setReactFlowInstance}
+            nodeTypes={nodeTypes}
+            proOptions={proOptions}
+            fitView
+            snapGrid={[gridSize, gridSize]}
+            connectionLineType="smoothstep"
+            isValidConnection={(connection) => {
+              console.log("✅ [UI] isValidConnection - Validating:", {
+                source: connection.source,
+                sourceHandle: connection.sourceHandle,
+                target: connection.target,
+                targetHandle: connection.targetHandle,
+              });
+              const isValid = connection.target !== connection.source;
+              console.log("✅ [UI] isValidConnection result:", isValid);
+              return isValid;
+            }}
+          >
             <Background color="rgba(139, 92, 246, 0.1)" gap={gridSize} />
 
-            {/* Styled controls with custom button styling */}
             <Controls
               style={{
                 bottom: "auto",
@@ -170,7 +184,6 @@ export const PipelineUI = () => {
               }}
             />
 
-            {/* Styled minimap - Dark mode aware */}
             <MiniMap
               className="
                 bg-gradient-to-br from-purple-100/50 to-purple-400/50
@@ -186,13 +199,6 @@ export const PipelineUI = () => {
               }
             />
           </ReactFlow>
-
-          {/* Drag indicator dots overlay - Permanent dots */}
-          {/* <svg className="absolute inset-0 w-full h-full pointer-events-none z-0" style={{position: "absolute", top: 0, left: 0}}>
-            {dragDots.map((dot) => (
-              <circle key={dot.id} cx={dot.x} cy={dot.y} r={2} fill="rgba(139, 92, 246, 0.6)" />
-            ))}
-          </svg> */}
         </div>
       </div>
     </>
