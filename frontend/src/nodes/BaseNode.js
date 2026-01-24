@@ -2,6 +2,7 @@ import {useState, useRef, useEffect} from "react";
 import {Handle, Position} from "reactflow";
 import {useColorMode} from "../hooks/useColorMode";
 import {colorSchemes} from "../colorScheme";
+import {useDarkMode} from "../hooks/useDarkMode";
 const ColorPickerComponent = ({colorType, value, onChange}) => {
   const canvasRef = useRef(null);
   const [showPicker, setShowPicker] = useState(false);
@@ -140,23 +141,7 @@ const TableComponent = ({rows, columns}) => {
 
 export const BaseNode = ({id, data, config}) => {
   const {colorMode} = useColorMode();
-  const [isDark, setIsDark] = useState(false);
-
-  useEffect(() => {
-    const darkMode = document.documentElement.classList.contains("dark");
-    setIsDark(darkMode);
-
-    const observer = new MutationObserver(() => {
-      setIsDark(document.documentElement.classList.contains("dark"));
-    });
-
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["class"],
-    });
-
-    return () => observer.disconnect();
-  }, []);
+  const isDark = useDarkMode();
 
   // Extract configuration with defaults
   const {title = "Node", description = null, handles = [], fields = [], styles = {}, color = "processing"} = config;
