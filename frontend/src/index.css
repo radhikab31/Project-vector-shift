@@ -76,3 +76,16 @@ body {
 .dark .react-flow__controls {
   border-color: rgb(185 130 231 / 95%);
 }
+
+.react-flow__handle-right {
+  right: -8px !important;
+}
+
+.react-flow__handle {
+  width: 15px !important;
+  height: 15px !important;
+}
+
+.react-flow__handle-left {
+  left: -8px !important;
+}

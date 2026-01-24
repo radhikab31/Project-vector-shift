@@ -1,5 +1,6 @@
 import {useState, useRef, useEffect, useCallback} from "react";
-import {Handle, Position} from "reactflow";
+import {Handle, Position, useUpdateNodeInternals} from "reactflow";
+
 import {useColorMode} from "../hooks/useColorMode";
 import {colorSchemes} from "../colorScheme";
 import {useStore} from "../store";
@@ -9,6 +10,8 @@ import {TableComponent} from "../components/TableComponent";
 import {useDarkMode} from "../hooks/useDarkMode";
 
 export const BaseNode = ({id, data, config}) => {
+  const updateNodeInternals = useUpdateNodeInternals();
+
   const {colorMode} = useColorMode();
   const updateNodeSize = useStore((state) => state.updateNodeSize);
   const isDark = useDarkMode();
@@ -72,13 +75,16 @@ export const BaseNode = ({id, data, config}) => {
   // When new dynamic handles are created, React Flow needs to recalculate positions
   useEffect(() => {
     const timer = setTimeout(() => {
-      // Dispatch resize event to force React Flow to recalculate handle positions
       window.dispatchEvent(new Event("resize"));
       console.log("🔄 Dispatched resize event to update React Flow handles");
     }, 50);
 
     return () => clearTimeout(timer);
   }, [extractedVariables]);
+
+  useEffect(() => {
+    updateNodeInternals(id);
+  }, [extractedVariables, id, updateNodeInternals]);
 
   const handleFieldChange = useCallback((fieldKey, value) => {
     setFieldValues((prev) => ({
@@ -276,7 +282,8 @@ export const BaseNode = ({id, data, config}) => {
 
       {/* ==================== PART 3: DYNAMIC VARIABLE HANDLES (FIXED WITH VALIDATION) ==================== */}
       {extractedVariables.map((varName, index) => {
-        const handleId = `${id}-var-${varName}`;
+        const safeVar = varName.replace(/[^a-zA-Z0-9_-]/g, "");
+        const handleId = `${id}-var-${safeVar}`;
 
         return (
           <Handle

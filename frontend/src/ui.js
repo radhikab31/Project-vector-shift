@@ -159,7 +159,7 @@ export const PipelineUI = () => {
             onInit={setReactFlowInstance}
             nodeTypes={nodeTypes}
             proOptions={proOptions}
-            fitView
+            // fitView
             snapGrid={[gridSize, gridSize]}
             connectionLineType="smoothstep"
             isValidConnection={(connection) => {
