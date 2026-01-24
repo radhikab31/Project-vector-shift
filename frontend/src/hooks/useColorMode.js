@@ -2,19 +2,6 @@
 // Custom hook for managing dark/light mode with localStorage persistence
 
 import {useState, useEffect, useCallback} from "react";
-
-/**
- * useColorMode Hook
- *
- * Manages dark/light mode state with localStorage persistence
- *
- * Returns:
- *   - colorMode: 'light' | 'dark'
- *   - toggleColorMode: () => void
- *
- * Usage:
- *   const { colorMode, toggleColorMode } = useColorMode();
- */
 export const useColorMode = () => {
   const [colorMode, setColorMode] = useState("light");
   const [mounted, setMounted] = useState(false);
@@ -60,8 +47,3 @@ export const useColorMode = () => {
 
   return {colorMode, toggleColorMode};
 };
-
-/**
- * ColorModeProvider Component (Optional - for future use with Context)
- * Currently not needed, but can be added for more advanced use cases
- */

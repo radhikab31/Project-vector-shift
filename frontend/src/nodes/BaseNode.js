@@ -78,7 +78,7 @@ const ColorPickerComponent = ({colorType, value, onChange}) => {
 
   return (
     <div className="mb-2.5">
-      <label className="text-xs font-semibold text-gray-600 dark:text-gray-600 mb-1 uppercase tracking-wider block">Color Picker</label>
+      <label className="text-xs font-semibold text-gray-600 dark:text-gray-200 mb-1 uppercase tracking-wider block">Color Picker</label>
       <canvas ref={canvasRef} width={200} height={120} onClick={handleCanvasClick} className="w-full h-auto cursor-crosshair rounded-lg border border-purple-400/30 dark:border-purple-300/40 block mb-2 hover:border-purple-500/50 dark:hover:border-purple-200/50 transition-all duration-200" />
       <div className="flex gap-2 items-center">
         <div
@@ -180,7 +180,7 @@ export const BaseNode = ({id, data, config}) => {
       if (field.type === "text") {
         return (
           <div key={field.key} className="mb-2.5">
-            <label className="text-xs font-semibold text-gray-700 dark:text-gray-700 mb-1 uppercase tracking-wider block">{field.label}</label>
+            <label className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1 uppercase tracking-wider block">{field.label}</label>
             <input type="text" value={value || ""} onChange={(e) => handleFieldChange(field.key, e.target.value)} onMouseDown={(e) => e.stopPropagation()} onTouchStart={(e) => e.stopPropagation()} placeholder={field.placeholder || ""} className="py-2 px-2.5 rounded-lg border border-purple-400/30 dark:border-purple-300/40 text-xs w-full outline-none box-border bg-white/80 dark:bg-purple-900/20 backdrop-blur-sm text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:border-purple-400/80 dark:focus:border-purple-200/80 focus:ring-2 focus:ring-purple-500/30 dark:focus:ring-purple-400/30 focus:scale-105 transition-all duration-200 hover:border-purple-400/50 dark:hover:border-purple-200/50" />
           </div>
         );
@@ -190,7 +190,7 @@ export const BaseNode = ({id, data, config}) => {
       else if (field.type === "number") {
         return (
           <div key={field.key} className="mb-2.5">
-            <label className="text-xs font-semibold text-gray-700 dark:text-gray-700 mb-1 uppercase tracking-wider block">{field.label}</label>
+            <label className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1 uppercase tracking-wider block">{field.label}</label>
             <input
               type="number"
               value={value || ""}
@@ -201,7 +201,7 @@ export const BaseNode = ({id, data, config}) => {
               min={field.min || 0}
               max={field.max || undefined}
               step={field.step || 1}
-              className="py-2 px-2.5 rounded-lg border border-purple-400/30 dark:border-purple-300/40 text-xs w-full outline-none box-border bg-white/80 dark:bg-purple-900/20 backdrop-blur-sm text-gray-900 dark:text-gray-900 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:border-purple-400/80 dark:focus:border-purple-200/80 focus:ring-2 focus:ring-purple-500/30 dark:focus:ring-purple-400/30 focus:scale-105 transition-all duration-200 hover:border-purple-400/50 dark:hover:border-purple-200/50"
+              className="py-2 px-2.5 rounded-lg border border-purple-400/30 dark:border-purple-300/40 text-xs w-full outline-none box-border bg-white/80 dark:bg-purple-200/20 backdrop-blur-sm text-gray-900 dark:text-gray-200 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:border-purple-400/80 dark:focus:border-purple-200/80 focus:ring-2 focus:ring-purple-500/30 dark:focus:ring-purple-400/30 focus:scale-105 transition-all duration-200 hover:border-purple-400/50 dark:hover:border-purple-200/50"
             />
           </div>
         );
@@ -211,7 +211,7 @@ export const BaseNode = ({id, data, config}) => {
       else if (field.type === "file") {
         return (
           <div key={field.key} className="mb-2.5">
-            <label className="text-xs font-semibold text-gray-700 dark:text-gray-700 mb-1 uppercase tracking-wider block">{field.label}</label>
+            <label className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1 uppercase tracking-wider block">{field.label}</label>
             <input
               type="file"
               accept={field.accept || "*"}
@@ -228,9 +228,9 @@ export const BaseNode = ({id, data, config}) => {
               }}
               onMouseDown={(e) => e.stopPropagation()}
               onTouchStart={(e) => e.stopPropagation()}
-              className="py-2 px-2.5 rounded-lg border border-purple-400/30 dark:border-purple-300/40 text-xs w-full outline-none box-border bg-white/80 dark:bg-purple-900/20 backdrop-blur-sm text-gray-900 dark:text-gray-900 focus:border-purple-400/80 dark:focus:border-purple-200/80 focus:ring-2 focus:ring-purple-500/30 dark:focus:ring-purple-400/30 transition-all duration-200 hover:border-purple-400/50 dark:hover:border-purple-200/50"
+              className="py-2 px-2.5 rounded-lg border border-purple-400/30 dark:border-purple-300/40 text-xs w-full outline-none box-border bg-white/80 dark:bg-purple-900/20 backdrop-blur-sm text-gray-900 dark:text-gray-200 focus:border-purple-400/80 dark:focus:border-purple-200/80 focus:ring-2 focus:ring-purple-500/30 dark:focus:ring-purple-400/30 transition-all duration-200 hover:border-purple-400/50 dark:hover:border-purple-200/50"
             />
-            {value?.name && <div className="text-xs text-gray-700 dark:text-gray-700 bg-purple-100/40 dark:bg-purple-900/30 mb-1.5 p-1.5 rounded-lg break-words border border-purple-300/30 dark:border-purple-400/30">📄 {value.name}</div>}
+            {value?.name && <div className="text-xs text-gray-700 dark:text-gray-300 bg-purple-100/40 dark:bg-purple-900/30 mb-1.5 p-1.5 rounded-lg break-words border border-purple-300/30 dark:border-purple-400/30">📄 {value.name}</div>}
           </div>
         );
       }
@@ -239,8 +239,8 @@ export const BaseNode = ({id, data, config}) => {
       else if (field.type === "select") {
         return (
           <div key={field.key} className="mb-2.5">
-            <label className="text-xs font-semibold text-gray-700 dark:text-gray-700 mb-1 uppercase tracking-wider block">{field.label}</label>
-            <select value={value || ""} onChange={(e) => handleFieldChange(field.key, e.target.value)} onMouseDown={(e) => e.stopPropagation()} onTouchStart={(e) => e.stopPropagation()} className="py-2 px-2.5 rounded-lg border border-purple-400/30 dark:border-purple-300/40 bg-white dark:bg-purple-900/20 cursor-pointer text-xs w-full outline-none box-border backdrop-blur-sm text-gray-900 dark:text-gray-900 focus:border-purple-400/80 dark:focus:border-purple-200/80 focus:ring-2 focus:ring-purple-500/30 dark:focus:ring-purple-400/30 transition-all duration-200 hover:border-purple-400/50 dark:hover:border-purple-200/50">
+            <label className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1 uppercase tracking-wider block">{field.label}</label>
+            <select value={value || ""} onChange={(e) => handleFieldChange(field.key, e.target.value)} onMouseDown={(e) => e.stopPropagation()} onTouchStart={(e) => e.stopPropagation()} className="py-2 px-2.5 rounded-lg border border-purple-400/30 dark:border-purple-300/40 bg-white dark:bg-purple-900/20 cursor-pointer text-xs w-full outline-none box-border backdrop-blur-sm text-gray-900 dark:text-gray-200 focus:border-purple-400/80 dark:focus:border-purple-200/80 focus:ring-2 focus:ring-purple-500/30 dark:focus:ring-purple-400/30 transition-all duration-200 hover:border-purple-400/50 dark:hover:border-purple-200/50">
               <option value="">Select {field.label}</option>
               {field.options.map((opt) => {
                 const optionValue = typeof opt === "object" ? opt.value : opt;
@@ -260,7 +260,7 @@ export const BaseNode = ({id, data, config}) => {
       else if (field.type === "textarea") {
         return (
           <div key={field.key} className="mb-2.5">
-            <label className="text-xs font-semibold text-gray-700 dark:text-gray-700 mb-1 uppercase tracking-wider block">{field.label}</label>
+            <label className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1 uppercase tracking-wider block">{field.label}</label>
             <textarea value={value || ""} onChange={(e) => handleFieldChange(field.key, e.target.value)} onMouseDown={(e) => e.stopPropagation()} onTouchStart={(e) => e.stopPropagation()} rows={field.rows || 3} placeholder={field.placeholder || ""} className="py-2 px-2.5 resize-none rounded-lg border border-purple-400/30 dark:border-purple-300/40 text-xs w-full outline-none box-border bg-white/80 dark:bg-purple-900/20 backdrop-blur-sm text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:border-purple-400/80 dark:focus:border-purple-200/80 focus:ring-2 focus:ring-purple-500/30 dark:focus:ring-purple-400/30 transition-all duration-200 hover:border-purple-400/50 dark:hover:border-purple-200/50" />
           </div>
         );
@@ -270,7 +270,7 @@ export const BaseNode = ({id, data, config}) => {
       else if (field.type === "checkbox") {
         return (
           <div key={field.key} className="mb-2.5">
-            <label className="text-xs flex items-center gap-2 cursor-pointer select-none text-gray-700 dark:text-gray-700 hover:text-gray-900 dark:hover:text-gray-100 transition-colors duration-150">
+            <label className="text-xs flex items-center gap-2 cursor-pointer select-none text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors duration-150">
               <input type="checkbox" checked={value || false} onChange={(e) => handleFieldChange(field.key, e.target.checked)} onMouseDown={(e) => e.stopPropagation()} onTouchStart={(e) => e.stopPropagation()} className="cursor-pointer w-4 h-4 rounded accent-purple-600 dark:accent-purple-400" />
               {field.label}
             </label>
@@ -294,7 +294,7 @@ export const BaseNode = ({id, data, config}) => {
         const columns = fieldValues[field.columnsKey] || 0;
         return (
           <div key={field.key} className="mb-2.5">
-            <label className="text-xs font-semibold text-gray-700 dark:text-gray-700 mb-1 uppercase tracking-wider block">{field.label}</label>
+            <label className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1 uppercase tracking-wider block">{field.label}</label>
             <TableComponent rows={parseInt(rows) || 0} columns={parseInt(columns) || 0} />
           </div>
         );
@@ -311,7 +311,7 @@ export const BaseNode = ({id, data, config}) => {
 
   return (
     <div
-      className="w-55 min-h-24 rounded-2xl border-2 shadow-lg hover:shadow-2xl transition-all duration-200 hover:scale-105 hover:border-purple-400/50 dark:hover:border-purple-300/50 p-3.5 backdrop-blur-md bg-gradient-to-br from-purple-600/10 to-purple-800/5 dark:from-purple-600/15 dark:to-purple-800/10"
+      className="w-41 min-h-24 rounded-2xl border-2 shadow-lg hover:shadow-2xl transition-all duration-200 hover:scale-105 hover:border-purple-400/50 dark:hover:border-purple-300/50 p-3.5 backdrop-blur-md bg-gradient-to-br from-purple-600/10 to-purple-800/5 dark:from-purple-600/15 dark:to-purple-800/10"
       style={{
         borderColor: borderColor,
         backgroundColor: bgColor,
@@ -325,7 +325,7 @@ export const BaseNode = ({id, data, config}) => {
       </div>
 
       {/* Description */}
-      {description && <div className="text-2xs leading-5 text-gray-600 dark:text-gray-600 mb-2 font-medium">{description}</div>}
+      {description && <div className="text-2xs leading-5 text-gray-600 dark:text-gray-200 mb-2 font-medium">{description}</div>}
 
       {/* Form Fields Container */}
       {fields.length > 0 && (

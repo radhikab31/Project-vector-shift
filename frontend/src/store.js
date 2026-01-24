@@ -1,5 +1,3 @@
-// store.js
-
 import { create } from "zustand";
 import {
     addEdge,
