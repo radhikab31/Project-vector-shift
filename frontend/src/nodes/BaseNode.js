@@ -1,26 +1,7 @@
-// BaseNode.js
 import {useState, useRef, useEffect} from "react";
 import {Handle, Position} from "reactflow";
-
-// Color schemes for different node types
-const colorSchemes = {
-  input: {bg: "#E3F2FD", border: "#1976D2", title: "#0D47A1"},
-  output: {bg: "#F3E5F5", border: "#7B1FA2", title: "#4A148C"},
-  llm: {bg: "#FFF3E0", border: "#F57C00", title: "#E65100"},
-  text: {bg: "#E8F5E9", border: "#388E3C", title: "#1B5E20"},
-  processing: {bg: "#FCE4EC", border: "#C2185B", title: "#880E4F"},
-  database: {bg: "#ECEFF1", border: "#455A64", title: "#1C252C"},
-  trigger: {bg: "#FFF9C4", border: "#F9A825", title: "#F57F17"},
-  image: {bg: "#FFEBEE", border: "#FF6B6B", title: "#D32F2F"},
-  document: {bg: "#FFF3E0", border: "#FFA500", title: "#E65100"},
-  table: {bg: "#E3F2FD", border: "#0288D1", title: "#01579B"},
-  colorPalette: {bg: "#FCE4EC", border: "#E91E63", title: "#880E4F"},
-  decision: {bg: "#FFF9C4", border: "#FBC02D", title: "#F57F17"},
-};
-
-// ============ HELPER COMPONENTS ============
-
-// Color Picker Component
+import {useColorMode} from "../hooks/useColorMode";
+import {colorSchemes} from "../colorScheme";
 const ColorPickerComponent = ({colorType, value, onChange}) => {
   const canvasRef = useRef(null);
   const [showPicker, setShowPicker] = useState(false);
@@ -53,7 +34,6 @@ const ColorPickerComponent = ({colorType, value, onChange}) => {
     onChange(newValue);
   };
 
-  // Draw color gradient on canvas
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -97,23 +77,23 @@ const ColorPickerComponent = ({colorType, value, onChange}) => {
   };
 
   return (
-    <div style={{marginBottom: "10px"}}>
-      <label className="text-2.6 block font-semibold text-zinc-500 mb-1 uppercase tracking-[0.5px]">Color Picker</label>
-      <canvas ref={canvasRef} width={200} height={120} onClick={handleCanvasClick} className="w-full h-auto cursor-crosshair rounded-md border border-neutral-200 block mb-2 " />
+    <div className="mb-2.5">
+      <label className="text-xs font-semibold text-gray-600 dark:text-gray-600 mb-1 uppercase tracking-wider block">Color Picker</label>
+      <canvas ref={canvasRef} width={200} height={120} onClick={handleCanvasClick} className="w-full h-auto cursor-crosshair rounded-lg border border-purple-400/30 dark:border-purple-300/40 block mb-2 hover:border-purple-500/50 dark:hover:border-purple-200/50 transition-all duration-200" />
       <div className="flex gap-2 items-center">
         <div
-          className="w-7.5 h-7.5 rounded-sm border border-neutral-200"
+          className="w-8 h-8 rounded-md border-2 border-purple-400/50 shadow-md hover:shadow-lg transition-all duration-200"
           style={{
             backgroundColor: formatColorForCSS(value),
           }}
         />
-        <span className="text-3.5 text-gray-600">{formatColorForCSS(value) || "Click to pick"}</span>
+        <span className="text-xs text-gray-600 dark:text-gray-300 font-medium">{formatColorForCSS(value) || "Click to pick"}</span>
       </div>
     </div>
   );
 };
 
-// Table Component
+// Table Component with glassmorphism styling
 const TableComponent = ({rows, columns}) => {
   const [tableData, setTableData] = useState(() => {
     const data = [];
@@ -134,18 +114,18 @@ const TableComponent = ({rows, columns}) => {
   };
 
   if (rows === 0 || columns === 0) {
-    return <div className="text-2.6 text-slate-400 p-2 text-center">Set rows and columns to render table</div>;
+    return <div className="text-xs text-slate-400 dark:text-slate-500 p-3 text-center bg-slate-50 dark:bg-slate-900/30 rounded-lg border border-slate-200 dark:border-slate-700/50">Set rows and columns to render table</div>;
   }
 
   return (
     <div className="overflow-x-auto mb-2.5 mt-2">
-      <table className="w-full text-2.5 overflow-hidden bg-white rounded-sm border border-neutral-200 border-collapse">
+      <table className="w-full text-xs bg-white dark:bg-slate-900/50 rounded-lg border border-purple-400/20 dark:border-purple-300/20 border-collapse overflow-hidden backdrop-blur-sm">
         <tbody>
           {tableData.map((row, rowIdx) => (
-            <tr key={rowIdx}>
+            <tr key={rowIdx} className="hover:bg-purple-100/20 dark:hover:bg-purple-900/20 transition-colors duration-150">
               {row.map((cell, colIdx) => (
-                <td key={`${rowIdx}-${colIdx}`} className="border border-neutral-200 py-1 px-1.5">
-                  <input type="text" value={cell} onChange={(e) => handleCellChange(rowIdx, colIdx, e.target.value)} className="w-full border-none p-0.5 text-2.5 outline-none" placeholder={`R${rowIdx + 1}C${colIdx + 1}`} />
+                <td key={`${rowIdx}-${colIdx}`} className="border border-purple-400/20 dark:border-purple-300/20 py-1.5 px-2 hover:bg-purple-50 dark:hover:bg-purple-900/30 transition-colors duration-150">
+                  <input type="text" value={cell} onChange={(e) => handleCellChange(rowIdx, colIdx, e.target.value)} className="w-full border-none bg-transparent p-0.5 text-xs outline-none text-gray-700 dark:text-gray-200 placeholder:text-gray-400 dark:placeholder:text-gray-500" placeholder={`R${rowIdx + 1}C${colIdx + 1}`} onMouseDown={(e) => e.stopPropagation()} onTouchStart={(e) => e.stopPropagation()} />
                 </td>
               ))}
             </tr>
@@ -159,10 +139,12 @@ const TableComponent = ({rows, columns}) => {
 // ============ MAIN BASENODE COMPONENT ============
 
 export const BaseNode = ({id, data, config}) => {
+  const {colorMode} = useColorMode();
+
   // Extract configuration with defaults
   const {title = "Node", description = null, handles = [], fields = [], styles = {}, color = "processing"} = config;
 
-  // Get color scheme
+  // Get color scheme from imported colorSchemes object
   const scheme = colorSchemes[color] || colorSchemes.processing;
 
   // Dynamically create state for all fields
@@ -197,9 +179,9 @@ export const BaseNode = ({id, data, config}) => {
       // ========== TEXT INPUT ==========
       if (field.type === "text") {
         return (
-          <div key={field.key} style={{marginBottom: "10px"}}>
-            <label className="text-2.6 block font-semibold text-neutral-600 mb-1 uppercase tracking-widest ">{field.label}</label>
-            <input type="text" value={value || ""} onChange={(e) => handleFieldChange(field.key, e.target.value)} onMouseDown={(e) => e.stopPropagation()} onTouchStart={(e) => e.stopPropagation()} placeholder={field.placeholder || ""} className="py-2 px-2.5 rounded-md border border-neutral-200 text-xs w-full outline-none box-border font-serif transition-[border-color] duration-200" onFocus={(e) => (e.target.style.borderColor = scheme.border)} onBlur={(e) => (e.target.style.borderColor = "#ddd")} />
+          <div key={field.key} className="mb-2.5">
+            <label className="text-xs font-semibold text-gray-700 dark:text-gray-700 mb-1 uppercase tracking-wider block">{field.label}</label>
+            <input type="text" value={value || ""} onChange={(e) => handleFieldChange(field.key, e.target.value)} onMouseDown={(e) => e.stopPropagation()} onTouchStart={(e) => e.stopPropagation()} placeholder={field.placeholder || ""} className="py-2 px-2.5 rounded-lg border border-purple-400/30 dark:border-purple-300/40 text-xs w-full outline-none box-border bg-white/80 dark:bg-purple-900/20 backdrop-blur-sm text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:border-purple-400/80 dark:focus:border-purple-200/80 focus:ring-2 focus:ring-purple-500/30 dark:focus:ring-purple-400/30 focus:scale-105 transition-all duration-200 hover:border-purple-400/50 dark:hover:border-purple-200/50" />
           </div>
         );
       }
@@ -207,9 +189,20 @@ export const BaseNode = ({id, data, config}) => {
       // ========== NUMBER INPUT ==========
       else if (field.type === "number") {
         return (
-          <div key={field.key} style={{marginBottom: "10px"}}>
-            <label className="text-2.6 block font-semibold text-neutral-600 mb-1 uppercase tracking-widest ">{field.label}</label>
-            <input type="number" value={value || ""} onWheel={(e) => e.target.blur()} onChange={(e) => handleFieldChange(field.key, e.target.value ? parseInt(e.target.value) : "")} onMouseDown={(e) => e.stopPropagation()} onTouchStart={(e) => e.stopPropagation()} min={field.min || 0} max={field.max || undefined} step={field.step || 1} className="py-2 px-2.5 rounded-md border border-neutral-200 text-xs w-full outline-none box-border font-serif transition-[border-color] duration-200" onFocus={(e) => (e.target.style.borderColor = scheme.border)} onBlur={(e) => (e.target.style.borderColor = "#ddd")} />
+          <div key={field.key} className="mb-2.5">
+            <label className="text-xs font-semibold text-gray-700 dark:text-gray-700 mb-1 uppercase tracking-wider block">{field.label}</label>
+            <input
+              type="number"
+              value={value || ""}
+              onWheel={(e) => e.target.blur()}
+              onChange={(e) => handleFieldChange(field.key, e.target.value ? parseInt(e.target.value) : "")}
+              onMouseDown={(e) => e.stopPropagation()}
+              onTouchStart={(e) => e.stopPropagation()}
+              min={field.min || 0}
+              max={field.max || undefined}
+              step={field.step || 1}
+              className="py-2 px-2.5 rounded-lg border border-purple-400/30 dark:border-purple-300/40 text-xs w-full outline-none box-border bg-white/80 dark:bg-purple-900/20 backdrop-blur-sm text-gray-900 dark:text-gray-900 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:border-purple-400/80 dark:focus:border-purple-200/80 focus:ring-2 focus:ring-purple-500/30 dark:focus:ring-purple-400/30 focus:scale-105 transition-all duration-200 hover:border-purple-400/50 dark:hover:border-purple-200/50"
+            />
           </div>
         );
       }
@@ -217,9 +210,8 @@ export const BaseNode = ({id, data, config}) => {
       // ========== FILE INPUT ==========
       else if (field.type === "file") {
         return (
-          <div key={field.key} style={{marginBottom: "10px"}}>
-            <label className="text-2.6 block font-semibold text-neutral-600 mb-1 uppercase tracking-widest ">{field.label}</label>
-
+          <div key={field.key} className="mb-2.5">
+            <label className="text-xs font-semibold text-gray-700 dark:text-gray-700 mb-1 uppercase tracking-wider block">{field.label}</label>
             <input
               type="file"
               accept={field.accept || "*"}
@@ -236,11 +228,9 @@ export const BaseNode = ({id, data, config}) => {
               }}
               onMouseDown={(e) => e.stopPropagation()}
               onTouchStart={(e) => e.stopPropagation()}
-              className="py-2 px-2.5 rounded-md border border-neutral-200 text-xs w-full outline-none box-border font-serif transition-[border-color] duration-200"
-              onFocus={(e) => (e.target.style.borderColor = scheme.border)}
-              onBlur={(e) => (e.target.style.borderColor = "#ddd")}
+              className="py-2 px-2.5 rounded-lg border border-purple-400/30 dark:border-purple-300/40 text-xs w-full outline-none box-border bg-white/80 dark:bg-purple-900/20 backdrop-blur-sm text-gray-900 dark:text-gray-900 focus:border-purple-400/80 dark:focus:border-purple-200/80 focus:ring-2 focus:ring-purple-500/30 dark:focus:ring-purple-400/30 transition-all duration-200 hover:border-purple-400/50 dark:hover:border-purple-200/50"
             />
-            {value?.name && <div className="text-xs text-gray-600 bg-neutral-100 mb-1 p-1.5 rounded break-words">📄 {value.name}</div>}
+            {value?.name && <div className="text-xs text-gray-700 dark:text-gray-700 bg-purple-100/40 dark:bg-purple-900/30 mb-1.5 p-1.5 rounded-lg break-words border border-purple-300/30 dark:border-purple-400/30">📄 {value.name}</div>}
           </div>
         );
       }
@@ -248,12 +238,11 @@ export const BaseNode = ({id, data, config}) => {
       // ========== SELECT/DROPDOWN ==========
       else if (field.type === "select") {
         return (
-          <div key={field.key} style={{marginBottom: "10px"}}>
-            <label className="text-xs block font-semibold text-gray-600 mb-1 uppercase tracking-widest">{field.label}</label>
-            <select value={value || ""} onChange={(e) => handleFieldChange(field.key, e.target.value)} onMouseDown={(e) => e.stopPropagation()} onTouchStart={(e) => e.stopPropagation()} className="py-2 px-2.5 rounded-md border bg-white cursor-pointer border-neutral-200 text-xs w-full outline-none box-border font-serif transition-[border-color] duration-200" onFocus={(e) => (e.target.style.borderColor = scheme.border)} onBlur={(e) => (e.target.style.borderColor = "#ddd")}>
+          <div key={field.key} className="mb-2.5">
+            <label className="text-xs font-semibold text-gray-700 dark:text-gray-700 mb-1 uppercase tracking-wider block">{field.label}</label>
+            <select value={value || ""} onChange={(e) => handleFieldChange(field.key, e.target.value)} onMouseDown={(e) => e.stopPropagation()} onTouchStart={(e) => e.stopPropagation()} className="py-2 px-2.5 rounded-lg border border-purple-400/30 dark:border-purple-300/40 bg-white dark:bg-purple-900/20 cursor-pointer text-xs w-full outline-none box-border backdrop-blur-sm text-gray-900 dark:text-gray-900 focus:border-purple-400/80 dark:focus:border-purple-200/80 focus:ring-2 focus:ring-purple-500/30 dark:focus:ring-purple-400/30 transition-all duration-200 hover:border-purple-400/50 dark:hover:border-purple-200/50">
               <option value="">Select {field.label}</option>
               {field.options.map((opt) => {
-                // Handle both string options and object options
                 const optionValue = typeof opt === "object" ? opt.value : opt;
                 const optionLabel = typeof opt === "object" ? opt.label : opt;
                 return (
@@ -270,9 +259,9 @@ export const BaseNode = ({id, data, config}) => {
       // ========== TEXTAREA ==========
       else if (field.type === "textarea") {
         return (
-          <div key={field.key} style={{marginBottom: "10px"}}>
-            <label className="text-xs block font-semibold text-gray-600 mb-1 uppercase tracking-widest">{field.label}</label>
-            <textarea value={value || ""} onChange={(e) => handleFieldChange(field.key, e.target.value)} onMouseDown={(e) => e.stopPropagation()} onTouchStart={(e) => e.stopPropagation()} rows={field.rows || 3} placeholder={field.placeholder || ""} className="py-2 px-2.5 resize-y rounded-md border border-neutral-200 text-xs w-full outline-none box-border font-serif transition-[border-color] duration-200" onFocus={(e) => (e.target.style.borderColor = scheme.border)} onBlur={(e) => (e.target.style.borderColor = "#ddd")} />
+          <div key={field.key} className="mb-2.5">
+            <label className="text-xs font-semibold text-gray-700 dark:text-gray-700 mb-1 uppercase tracking-wider block">{field.label}</label>
+            <textarea value={value || ""} onChange={(e) => handleFieldChange(field.key, e.target.value)} onMouseDown={(e) => e.stopPropagation()} onTouchStart={(e) => e.stopPropagation()} rows={field.rows || 3} placeholder={field.placeholder || ""} className="py-2 px-2.5 resize-none rounded-lg border border-purple-400/30 dark:border-purple-300/40 text-xs w-full outline-none box-border bg-white/80 dark:bg-purple-900/20 backdrop-blur-sm text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:border-purple-400/80 dark:focus:border-purple-200/80 focus:ring-2 focus:ring-purple-500/30 dark:focus:ring-purple-400/30 transition-all duration-200 hover:border-purple-400/50 dark:hover:border-purple-200/50" />
           </div>
         );
       }
@@ -280,19 +269,9 @@ export const BaseNode = ({id, data, config}) => {
       // ========== CHECKBOX ==========
       else if (field.type === "checkbox") {
         return (
-          <div key={field.key} style={{marginBottom: "10px"}}>
-            <label className="text-xs flex items-center gap-2 cursor-pointer select-none">
-              <input
-                type="checkbox"
-                checked={value || false}
-                onChange={(e) => handleFieldChange(field.key, e.target.checked)}
-                onMouseDown={(e) => e.stopPropagation()}
-                onTouchStart={(e) => e.stopPropagation()}
-                className="cursor-pointer w-4 h-4 "
-                style={{
-                  accentColor: scheme.border,
-                }}
-              />
+          <div key={field.key} className="mb-2.5">
+            <label className="text-xs flex items-center gap-2 cursor-pointer select-none text-gray-700 dark:text-gray-700 hover:text-gray-900 dark:hover:text-gray-100 transition-colors duration-150">
+              <input type="checkbox" checked={value || false} onChange={(e) => handleFieldChange(field.key, e.target.checked)} onMouseDown={(e) => e.stopPropagation()} onTouchStart={(e) => e.stopPropagation()} className="cursor-pointer w-4 h-4 rounded accent-purple-600 dark:accent-purple-400" />
               {field.label}
             </label>
           </div>
@@ -302,8 +281,6 @@ export const BaseNode = ({id, data, config}) => {
       // ========== COLOR PICKER ==========
       else if (field.type === "colorPicker") {
         const colorType = fieldValues[field.colorTypeKey] || "RGB";
-        console.log("color value", value, formatColorForCSS(value));
-
         return (
           <div key={field.key}>
             <ColorPickerComponent colorType={colorType} value={value || ""} onChange={(newValue) => handleFieldChange(field.key, newValue)} />
@@ -316,8 +293,8 @@ export const BaseNode = ({id, data, config}) => {
         const rows = fieldValues[field.rowsKey] || 0;
         const columns = fieldValues[field.columnsKey] || 0;
         return (
-          <div key={field.key} style={{marginBottom: "10px"}}>
-            <label className="text-xs block font-semibold mb-1 uppercase tracking-widest">{field.label}</label>
+          <div key={field.key} className="mb-2.5">
+            <label className="text-xs font-semibold text-gray-700 dark:text-gray-700 mb-1 uppercase tracking-wider block">{field.label}</label>
             <TableComponent rows={parseInt(rows) || 0} columns={parseInt(columns) || 0} />
           </div>
         );
@@ -327,51 +304,35 @@ export const BaseNode = ({id, data, config}) => {
     });
   };
 
-  // Default node styling with enhanced design
-  const defaultStyles = {
-    width: 220,
-    minHeight: 100,
-    backgroundColor: scheme.bg,
-    border: `2px solid ${scheme.border}`,
-    borderRadius: "12px",
-    padding: "14px",
-    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.08)",
-    fontFamily: '"Segoe UI", Tahoma, Geneva, Verdana, sans-serif',
-    transition: "box-shadow 0.2s, transform 0.2s",
-    ...styles,
-  };
+  // Determine colors based on mode
+  const bgColor = colorMode === "dark" ? scheme.darkBg : scheme.lightBg;
+  const borderColor = colorMode === "dark" ? scheme.darkBorder : scheme.lightBorder;
+  const titleColor = colorMode === "dark" ? scheme.darkTitle : scheme.title;
 
   return (
     <div
-      style={defaultStyles}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.boxShadow = `0 8px 20px rgba(0, 0, 0, 0.12), 0 0 0 3px ${scheme.bg}`;
-        e.currentTarget.style.transform = "translateY(-2px)";
+      className="w-55 min-h-24 rounded-2xl border-2 shadow-lg hover:shadow-2xl transition-all duration-200 hover:scale-105 hover:border-purple-400/50 dark:hover:border-purple-300/50 p-3.5 backdrop-blur-md bg-gradient-to-br from-purple-600/10 to-purple-800/5 dark:from-purple-600/15 dark:to-purple-800/10"
+      style={{
+        borderColor: borderColor,
+        backgroundColor: bgColor,
+        fontFamily: '"Segoe UI", Tahoma, Geneva, Verdana, sans-serif',
       }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.08)";
-        e.currentTarget.style.transform = "translateY(0)";
-      }}
+      onMouseDown={(e) => e.stopPropagation()}
     >
       {/* Title */}
-      <div
-        className="font-bold mb-2.5 text-sm tracking-[0.3px]"
-        style={{
-          color: scheme.title,
-        }}
-      >
+      <div className="font-bold mb-1.5 text-sm tracking-wide" style={{color: titleColor}}>
         {title}
       </div>
 
       {/* Description */}
-      {description && <div className="text-2.5 leading-6 text-gray-500 mb-2.5">{description}</div>}
+      {description && <div className="text-2xs leading-5 text-gray-600 dark:text-gray-600 mb-2 font-medium">{description}</div>}
 
       {/* Form Fields Container */}
       {fields.length > 0 && (
         <div
-          className="mb-2 pt-2"
+          className="mb-2 pt-2 border-t"
           style={{
-            borderTop: `1px solid ${scheme.border}30`,
+            borderTopColor: `${borderColor}50`,
           }}
         >
           {renderFields()}
@@ -385,10 +346,10 @@ export const BaseNode = ({id, data, config}) => {
           type={handle.type}
           position={handle.position}
           id={handle.id}
-          className="w-3 h-3 rounded-full border-0.5 border-white"
+          className="w-3 h-3 rounded-full border-2 border-white shadow-md hover:shadow-lg hover:scale-150 transition-all duration-300 cursor-pointer"
           style={{
-            backgroundColor: scheme.border,
-            boxShadow: `0 0 0 2px ${scheme.border}`,
+            backgroundColor: colorMode === "dark" ? scheme.darkBorder : scheme.border,
+            boxShadow: `0 0 8px ${colorMode === "dark" ? scheme.darkBorder : scheme.border}50, 0 0 0 2px white`,
             ...handle.style,
           }}
         />
