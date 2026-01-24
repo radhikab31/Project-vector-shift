@@ -2,8 +2,8 @@ import {useState, useRef, useEffect, useCallback} from "react";
 import {Handle, Position, useUpdateNodeInternals} from "reactflow";
 
 import {useColorMode} from "../hooks/useColorMode";
-import {colorSchemes} from "../colorScheme";
-import {useStore} from "../store";
+import {colorSchemes} from "../common/colorScheme";
+import {useStore} from "../common/store";
 import {extractVariables} from "../utils/variableParser";
 import {ColorPickerComponent} from "../components/ColorPickerComponent";
 import {TableComponent} from "../components/TableComponent";

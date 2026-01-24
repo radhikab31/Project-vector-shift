@@ -1,6 +1,6 @@
-import {PipelineToolbar} from "./toolbar";
-import {PipelineUI} from "./ui";
-import {SubmitButton} from "./submit";
+import {PipelineToolbar} from "./common/toolbar";
+import {PipelineUI} from "./common/ui";
+import {SubmitButton} from "./common/submit";
 import {useColorMode} from "./hooks/useColorMode";
 import {Sun, Moon} from "lucide-react";
 

@@ -8,18 +8,18 @@ import {useState, useRef, useCallback, useEffect} from "react";
 import ReactFlow, {Controls, Background, MiniMap} from "reactflow";
 import {useStore} from "./store";
 import {shallow} from "zustand/shallow";
-import {InputNode} from "./nodes/inputNode";
-import {LLMNode} from "./nodes/llmNode";
-import {OutputNode} from "./nodes/outputNode";
-import {TextNode} from "./nodes/textNode";
-import {ImageNode} from "./nodes/imageNode";
-import {DocumentNode} from "./nodes/documentNode";
-import {TableNode} from "./nodes/tableNode";
-import {ColorPaletteNode} from "./nodes/colorPaletteNode";
-import {DecisionNode} from "./nodes/decisionNode";
+import {InputNode} from "../nodes/inputNode";
+import {LLMNode} from "../nodes/llmNode";
+import {OutputNode} from "../nodes/outputNode";
+import {TextNode} from "../nodes/textNode";
+import {ImageNode} from "../nodes/imageNode";
+import {DocumentNode} from "../nodes/documentNode";
+import {TableNode} from "../nodes/tableNode";
+import {ColorPaletteNode} from "../nodes/colorPaletteNode";
+import {DecisionNode} from "../nodes/decisionNode";
 
 import "reactflow/dist/style.css";
-import {useDarkMode} from "./hooks/useDarkMode";
+import {useDarkMode} from "../hooks/useDarkMode";
 
 const gridSize = 20;
 const proOptions = {hideAttribution: true};
