@@ -54,7 +54,7 @@ body {
 }
 
 .dark .react-flow__controls-button:hover {
-  background: rgba(139, 92, 246, 0.25) !important;
+  background: rgba(172, 146, 231, 0.851) !important;
   border: 1px solid rgba(168, 85, 247, 0.4) !important;
   color: #a855f7;
   box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
