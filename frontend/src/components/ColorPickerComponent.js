@@ -40,7 +40,6 @@ export const ColorPickerComponent = ({colorType, value, onChange}) => {
     const width = canvas.width;
     const height = canvas.height;
 
-    // Create horizontal rainbow gradient
     for (let x = 0; x < width; x++) {
       const hue = (x / width) * 360;
       const saturation = 100;
@@ -51,7 +50,6 @@ export const ColorPickerComponent = ({colorType, value, onChange}) => {
       ctx.fillRect(x, 0, 1, height);
     }
 
-    // Add brightness gradient (top = bright, bottom = dark)
     const gradient = ctx.createLinearGradient(0, 0, 0, height);
     gradient.addColorStop(0, "rgba(255,255,255,1)");
     gradient.addColorStop(0.5, "rgba(255,255,255,0)");
@@ -94,11 +92,9 @@ export const ColorPickerComponent = ({colorType, value, onChange}) => {
 const formatColorForCSS = (value) => {
   if (!value) return "transparent";
 
-  // Convert RGB format: "255, 128, 64" → "rgb(255, 128, 64)"
   if (typeof value === "string" && value.includes(",")) {
     return `rgb(${value})`;
   }
 
-  // Keep HEX format unchanged: "#FF8040" → "#FF8040"
   return value;
 };

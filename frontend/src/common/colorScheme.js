@@ -1,16 +1,13 @@
 export const colorSchemes = {
   input: {
-    // Light mode
     bg: "#E3F2FD",
     border: "#1976D2",
     title: "#0D47A1",
     lightBg: "rgba(227, 242, 253, 0.9)",
     lightBorder: "rgba(25, 118, 210, 0.3)",
-    // Dark mode
     darkBg: "rgba(25, 118, 210, 0.15)",
     darkBorder: "rgba(100, 170, 255, 0.3)",
     darkTitle: "#90CAF9",
-    // Glass effect
     glassBlur: "md",
   },
   output: {

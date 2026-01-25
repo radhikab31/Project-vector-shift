@@ -1,4 +1,3 @@
-// configs/inputNodeConfig.js
 import { Position } from 'reactflow';
 
 export const inputNodeConfig = (id) => ({

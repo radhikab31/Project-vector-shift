@@ -29,15 +29,11 @@ export const useStore = create((set, get) => ({
     });
   },
 
-  // ==================== FIXED onConnect HANDLER ====================
-  // Manually create edges to properly handle dynamic variable handles
   onConnect: (connection) => {
     console.log("🔗 [STORE] onConnect called:", connection);
 
-    // Create edge object with all required fields for dynamic handles
     const newEdge = {
       id: `edge-${connection.source}-${connection.sourceHandle}-${connection.target}-${connection.targetHandle}`,
-      // id: `reactflow_edge-${connection.source}${connection.sourceHandle}-${connection.target}${connection.targetHandle}`,
       source: connection.source,
       target: connection.target,
       sourceHandle: connection.sourceHandle || null,
@@ -75,7 +71,6 @@ export const useStore = create((set, get) => ({
     set({
       nodes: get().nodes.map((node) => {
         if (node.id === nodeId) {
-          // Update node dimensions in data
           node.data = {...node.data, nodeWidth: width, nodeHeight: height};
         }
         return node;

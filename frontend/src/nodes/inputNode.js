@@ -1,4 +1,3 @@
-// inputNode.js
 import {BaseNode} from "./BaseNode";
 import {inputNodeConfig} from "../configs/inputNodeConfig";
 

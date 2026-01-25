@@ -1,4 +1,3 @@
-// llmNode.js
 import { BaseNode } from './BaseNode';
 import { llmNodeConfig } from '../configs/llmNodeConfig';
 

@@ -1,4 +1,3 @@
-// configs/llmNodeConfig.js
 import { Position } from 'reactflow';
 
 export const llmNodeConfig = (id) => ({

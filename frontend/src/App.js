@@ -9,7 +9,6 @@ function App() {
 
   return (
     <div className="h-screen flex flex-col transition-colors duration-300 bg-gradient-to-br from-zinc-50 to-zinc-100 dark:from-zinc-950 dark:to-slate-900">
-      {/* Dark Mode Toggle Button - Fixed at top right */}
       <div className="fixed top-12 right-4 z-50">
         <button onClick={toggleColorMode} className="p-2.5 flex rounded-full bg-gradient-to-br from-purple-600/20 to-purple-800/10 dark:from-purple-600/30 dark:to-purple-800/20 backdrop-blur-md border border-purple-400/30 dark:border-purple-300/40 hover:border-purple-400/50 dark:hover:border-purple-200/50 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 group" title={`Switch to ${colorMode === "light" ? "dark" : "light"} mode`}>
           {colorMode === "light" ? <Sun className="w-5 h-5 text-yellow-500 transition-all duration-300" /> : <Moon className="w-5 h-5 text-slate-300 transition-all duration-300" />}
@@ -18,17 +17,14 @@ function App() {
         </button>
       </div>
 
-      {/* Toolbar - Sticky header */}
       <div className="flex-shrink-0">
         <PipelineToolbar />
       </div>
 
-      {/* Main content area - Canvas */}
       <div className="flex-grow overflow-hidden">
         <PipelineUI />
       </div>
 
-      {/* Submit Button - Fixed footer */}
       <div className="flex-shrink-0">
         <SubmitButton />
       </div>

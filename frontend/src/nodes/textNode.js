@@ -1,4 +1,3 @@
-// textNode.js
 import {BaseNode} from "./BaseNode";
 import {textNodeConfig} from "../configs/textNodeConfig";
 

@@ -1,9 +1,3 @@
-// ui.js - PHASE 2: BEAUTIFUL CANVAS BACKGROUND WITH WORKING DOTS
-// Custom styled ReactFlow control buttons with w-26 h-30 bg-none
-// Permanent dots visible where nodes are dragged
-// Dark mode aware MiniMap with proper viewport visibility
-// FIXED: Proper onConnect handler with edge validation
-
 import {useState, useRef, useCallback, useEffect} from "react";
 import ReactFlow, {Controls, Background, MiniMap} from "reactflow";
 import {useStore} from "./store";
@@ -159,7 +153,6 @@ export const PipelineUI = () => {
             onInit={setReactFlowInstance}
             nodeTypes={nodeTypes}
             proOptions={proOptions}
-            // fitView
             snapGrid={[gridSize, gridSize]}
             connectionLineType="smoothstep"
             isValidConnection={(connection) => {

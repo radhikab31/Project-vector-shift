@@ -1,7 +1,6 @@
 import {colorSchemes} from "./colorScheme";
 
 export const DraggableNode = ({type, label}) => {
-  // Map node types to colorScheme keys
   const colorSchemeMap = {
     customInput: "input",
     llm: "llm",
@@ -14,12 +13,9 @@ export const DraggableNode = ({type, label}) => {
     decision: "decision",
   };
 
-  // Get color scheme for this node type
   const schemeKey = colorSchemeMap[type] || "processing";
   const scheme = colorSchemes[schemeKey];
 
-  // Extract hex colors and convert to tailwind-compatible format
-  // Get the dominant color from the scheme for tailwind classes
   const getColorClass = () => {
     switch (schemeKey) {
       case "input":

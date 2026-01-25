@@ -1,4 +1,3 @@
-// configs/textNodeConfig.js
 import {Position} from "reactflow";
 
 export const textNodeConfig = (id) => ({

@@ -14,18 +14,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
-# -------------------------
-# Health check
-# -------------------------
 @app.get("/")
 def read_root():
     return {"Ping": "Pong"}
 
-
-# -------------------------
-# Request models
-# -------------------------
 class Node(BaseModel):
     id: str
 
@@ -39,17 +31,12 @@ class Pipeline(BaseModel):
     nodes: List[Node]
     edges: List[Edge]
 
-
-# -------------------------
-# Parse pipeline endpoint
-# -------------------------
 @app.post("/pipelines/parse")
 def parse_pipeline(pipeline: Pipeline):
 
     num_nodes = len(pipeline.nodes)
     num_edges = len(pipeline.edges)
 
-    # Build adjacency list
     graph = {node.id: [] for node in pipeline.nodes}
 
     for edge in pipeline.edges:
@@ -58,7 +45,6 @@ def parse_pipeline(pipeline: Pipeline):
     visited = set()
     stack = set()
 
-    # DFS cycle detection
     def dfs(node):
         if node in stack:
             return False

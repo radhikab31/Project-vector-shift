@@ -1,4 +1,3 @@
-// outputNode.js
 import { BaseNode } from './BaseNode';
 import { outputNodeConfig } from '../configs/outputNodeConfig';
 

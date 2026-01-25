@@ -1,17 +1,12 @@
-// hooks/useColorMode.js
-// Custom hook for managing dark/light mode with localStorage persistence
-
 import {useState, useEffect, useCallback} from "react";
 export const useColorMode = () => {
   const [colorMode, setColorMode] = useState("light");
   const [mounted, setMounted] = useState(false);
 
-  // Initialize from localStorage on mount
   useEffect(() => {
     const savedMode = localStorage.getItem("colorMode") || "light";
     setColorMode(savedMode);
 
-    // Apply to HTML element for Tailwind dark: prefix
     if (savedMode === "dark") {
       document.documentElement.classList.add("dark");
     } else {
@@ -21,15 +16,12 @@ export const useColorMode = () => {
     setMounted(true);
   }, []);
 
-  // Toggle dark/light mode
   const toggleColorMode = useCallback(() => {
     setColorMode((prevMode) => {
       const newMode = prevMode === "light" ? "dark" : "light";
 
-      // Save to localStorage
       localStorage.setItem("colorMode", newMode);
 
-      // Apply to HTML element for Tailwind dark: prefix
       if (newMode === "dark") {
         document.documentElement.classList.add("dark");
       } else {
@@ -40,7 +32,6 @@ export const useColorMode = () => {
     });
   }, []);
 
-  // Return null during hydration to avoid mismatch
   if (!mounted) {
     return {colorMode: "light", toggleColorMode};
   }

@@ -30,7 +30,6 @@ export const BaseNode = ({id, data, config}) => {
   const [extractedVariables, setExtractedVariables] = useState([]);
   const textareaRef = useRef(null);
 
-  // ==================== PART 3: VARIABLE EXTRACTION EFFECT ====================
   useEffect(() => {
     const textField = fields.find((f) => f.type === "textarea" && f.key === "text");
 
@@ -41,7 +40,6 @@ export const BaseNode = ({id, data, config}) => {
     }
   }, [fieldValues, fields]);
 
-  // ==================== PART 3: AUTO-SIZING EFFECT ====================
   useEffect(() => {
     const textarea = textareaRef.current;
     if (!textarea) return;
@@ -56,7 +54,6 @@ export const BaseNode = ({id, data, config}) => {
     updateNodeSize(id, contentWidth, contentHeight);
   }, [fieldValues, id, updateNodeSize]);
 
-  // ==================== DEBUG: LOG HANDLE INFORMATION ====================
   useEffect(() => {
     console.log("📊 BaseNode Debug Info:");
     console.log("  Node ID:", id);
@@ -71,8 +68,6 @@ export const BaseNode = ({id, data, config}) => {
     console.log("  Static Handles:", handles);
   }, [id, title, fieldValues, extractedVariables, handles, fields]);
 
-  // ==================== FIX: FORCE REACT FLOW TO UPDATE HANDLES ====================
-  // When new dynamic handles are created, React Flow needs to recalculate positions
   useEffect(() => {
     const timer = setTimeout(() => {
       window.dispatchEvent(new Event("resize"));
@@ -103,7 +98,6 @@ export const BaseNode = ({id, data, config}) => {
         }
       }
 
-      // ========== TEXT INPUT ==========
       if (field.type === "text") {
         return (
           <div key={field.key} className="mb-2.5">
@@ -111,10 +105,7 @@ export const BaseNode = ({id, data, config}) => {
             <input type="text" value={value || ""} onChange={(e) => handleFieldChange(field.key, e.target.value)} onMouseDown={(e) => e.stopPropagation()} onTouchStart={(e) => e.stopPropagation()} placeholder={field.placeholder || ""} className="py-2 px-2.5 rounded-lg border border-purple-400/30 dark:border-purple-300/40 text-xs w-full outline-none box-border bg-white/80 dark:bg-purple-900/20 backdrop-blur-sm text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:border-purple-400/80 dark:focus:border-purple-200/80 focus:ring-2 focus:ring-purple-500/30 dark:focus:ring-purple-400/30 focus:scale-105 transition-all duration-200 hover:border-purple-400/50 dark:hover:border-purple-200/50" />
           </div>
         );
-      }
-
-      // ========== NUMBER INPUT ==========
-      else if (field.type === "number") {
+      } else if (field.type === "number") {
         return (
           <div key={field.key} className="mb-2.5">
             <label className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1 uppercase tracking-wider block">{field.label}</label>
@@ -132,10 +123,7 @@ export const BaseNode = ({id, data, config}) => {
             />
           </div>
         );
-      }
-
-      // ========== FILE INPUT ==========
-      else if (field.type === "file") {
+      } else if (field.type === "file") {
         return (
           <div key={field.key} className="mb-2.5">
             <label className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1 uppercase tracking-wider block">{field.label}</label>
@@ -160,10 +148,7 @@ export const BaseNode = ({id, data, config}) => {
             {value?.name && <div className="text-xs text-gray-700 dark:text-gray-300 bg-purple-100/40 dark:bg-purple-900/30 mb-1.5 p-1.5 rounded-lg break-words border border-purple-300/30 dark:border-purple-400/30">📄 {value.name}</div>}
           </div>
         );
-      }
-
-      // ========== SELECT/DROPDOWN ==========
-      else if (field.type === "select") {
+      } else if (field.type === "select") {
         return (
           <div key={field.key} className="mb-2.5">
             <label className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1 uppercase tracking-wider block">{field.label}</label>
@@ -181,10 +166,7 @@ export const BaseNode = ({id, data, config}) => {
             </select>
           </div>
         );
-      }
-
-      // ========== TEXTAREA WITH AUTO-SIZING (PART 3) ==========
-      else if (field.type === "textarea") {
+      } else if (field.type === "textarea") {
         return (
           <div key={field.key} className="mb-2.5">
             <label className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1 uppercase tracking-wider block">{field.label}</label>
@@ -205,10 +187,7 @@ export const BaseNode = ({id, data, config}) => {
             />
           </div>
         );
-      }
-
-      // ========== CHECKBOX ==========
-      else if (field.type === "checkbox") {
+      } else if (field.type === "checkbox") {
         return (
           <div key={field.key} className="mb-2.5">
             <label className="text-xs flex items-center gap-2 cursor-pointer select-none text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors duration-150">
@@ -217,20 +196,14 @@ export const BaseNode = ({id, data, config}) => {
             </label>
           </div>
         );
-      }
-
-      // ========== COLOR PICKER (MODULARIZED) ==========
-      else if (field.type === "colorPicker") {
+      } else if (field.type === "colorPicker") {
         const colorType = fieldValues[field.colorTypeKey] || "RGB";
         return (
           <div key={field.key}>
             <ColorPickerComponent colorType={colorType} value={value || ""} onChange={(newValue) => handleFieldChange(field.key, newValue)} />
           </div>
         );
-      }
-
-      // ========== TABLE (MODULARIZED) ==========
-      else if (field.type === "table") {
+      } else if (field.type === "table") {
         const rows = fieldValues[field.rowsKey] || 0;
         const columns = fieldValues[field.columnsKey] || 0;
         return (
@@ -245,7 +218,6 @@ export const BaseNode = ({id, data, config}) => {
     });
   };
 
-  // Determine colors based on mode
   const bgColor = isDark ? scheme.darkBg : scheme.lightBg;
   const borderColor = isDark ? scheme.darkBorder : scheme.lightBorder;
   const titleColor = isDark ? scheme.darkTitle : scheme.title;
@@ -280,7 +252,6 @@ export const BaseNode = ({id, data, config}) => {
         </div>
       )}
 
-      {/* ==================== PART 3: DYNAMIC VARIABLE HANDLES (FIXED WITH VALIDATION) ==================== */}
       {extractedVariables.map((varName, index) => {
         const safeVar = varName.replace(/[^a-zA-Z0-9_-]/g, "");
         const handleId = `${id}-var-${safeVar}`;
