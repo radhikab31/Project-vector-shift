@@ -55,20 +55,6 @@ export const BaseNode = ({id, data, config}) => {
   }, [fieldValues, id, updateNodeSize]);
 
   useEffect(() => {
-    console.log("📊 BaseNode Debug Info:");
-    console.log("  Node ID:", id);
-    console.log("  Node Title:", title);
-    const textField = fields.find((f) => f.key === "text");
-    console.log("  Text field value:", textField ? fieldValues[textField.key] : "N/A");
-    console.log("  Extracted Variables:", extractedVariables);
-    console.log(
-      "  Dynamic Handle IDs:",
-      extractedVariables.map((v) => `${id}-var-${v}`),
-    );
-    console.log("  Static Handles:", handles);
-  }, [id, title, fieldValues, extractedVariables, handles, fields]);
-
-  useEffect(() => {
     const timer = setTimeout(() => {
       window.dispatchEvent(new Event("resize"));
       console.log("🔄 Dispatched resize event to update React Flow handles");
